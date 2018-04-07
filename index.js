@@ -29,10 +29,11 @@ require('./routes/surveyRoutes')(app);
 
 if(process.env.NODE_ENV === 'production'){
   //serve main.js
-  app.use(express.static('client/build'))
+  app.use(express.static('client/build'));
 
   //serve index.html if it doesn't recognize route
   app.get('*', (req,res) => {
+    console.log("rendering index.html");
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
