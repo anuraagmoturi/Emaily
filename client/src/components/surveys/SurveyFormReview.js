@@ -26,6 +26,9 @@ const SurveyFormReview = ({onCancel, formValues, submitSurvey, history}) => {
 
       {reviewFields}
 
+      <h5>Add an Image</h5>
+      <input type="file" accept="image/*"/>
+
       <button
           className="yellow white-text darken-3 btn-flat"
           onClick={onCancel}
