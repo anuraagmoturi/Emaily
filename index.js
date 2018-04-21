@@ -9,6 +9,8 @@ require('./models/Survey');
 require('./services/passport');
 require('./services/cache');
 
+//mongoose.Promise = global.Promise;
+//mongoose.connect(keys.mongoUR, { useMongoclient: true});
 mongoose.connect(keys.mongoURI);
 
 const app =express();
@@ -28,7 +30,7 @@ require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
 require('./routes/surveyRoutes')(app);
 
-if(process.env.NODE_ENV === 'production'){
+if(['production', 'ci'].includes(process.env.NODE_ENV)){
   //serve main.js
   app.use(express.static('client/build'));
 

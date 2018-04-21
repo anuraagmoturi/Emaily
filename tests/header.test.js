@@ -1,27 +1,24 @@
-const puppeteer = require('puppeteer');
-let browser, page;
+
+const Page = require('./helpers/page');
+
+let page;
 
 //Every test runs this block before test block
 beforeEach(async () => {
-  // launch chromium browser
-   browser = await puppeteer.launch({
-    headless: false
-  });
-  //create new page/tab
-   page = await browser.newPage();
-  // go to our application at 3000
-  await page.goto('localhost:3000');
+  page = await Page.build();
+  await page.goto('http://localhost:3000');
 });
 
 //after each test
 afterEach(async () =>{
-  await browser.close();
+  await page.close();
 });
 
 test('Header Logo Text',async ()=> {
 
   //Use selector to get logo element
-  const text = await page.$eval('a.brand-logo', el => el.innerHTML);
+ // const text = await page.$eval('a.brand-logo', el => el.innerHTML);
+  const text = await page.getContentsOf('a.brand-logo');
 
   //Assertion
   expect(text).toEqual('Emaily');
@@ -35,6 +32,16 @@ test('clicking login starts OAuth flow', async ()=> {
   const url = await page.url();
 
   expect(url).toMatch(/accounts\.google\.com/);
+
+});
+
+test('When signed in, shows logout button', async() => {
+
+  await page.login();
+
+  const text = await page.getContentsOf('a[href="/api/logout"]');
+
+  expect(text).toEqual('Logout');
 
 });
 
